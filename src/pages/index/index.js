@@ -16,8 +16,8 @@ new Vue({
     pageNum: 1,
     pageSize: 6,
     lists: null,
-    loading: false, //是否可以加载（false:可以加载,true:不可以再加载）
-    allLoaded: false, //是否加载到底部
+    loading: false,
+    allLoaded: false,
     bannerLists: null
   },
   created() {
@@ -42,7 +42,6 @@ new Vue({
           this.lists = curLists
         }
         this.loading = false
-        this.pageNum++
       })
     },
     getBanner() {
