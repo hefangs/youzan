@@ -7,6 +7,8 @@ import url from 'js/api.js'
 
 import Foot from 'components/Foot.vue'
 
+import mixin from 'js/mixin.js'
+
 new Vue({
   el: '#app',
   data: {
@@ -23,8 +25,8 @@ new Vue({
     getTopList() {
       axios.post(url.topList).then(res => {
         this.topLists = res.data.lists
-      }).catch(function(err){
-        console.log(err)
+      }).catch(res => {
+
       })
     },
     getSubList(index, id) {
@@ -41,20 +43,13 @@ new Vue({
       axios.post(url.rank).then(res => {
         this.rankData = res.data.data
       })
+    },
+    toSearch(list) {
+      location.href = `search.html?keyword=${list.name}&id=${list.id}`
     }
   },
   components: {
     Foot
   },
-  filters: {
-    number(price) {
-      let priceStr = '' + price
-      if (priceStr.indexOf('.') > -1) {
-        let arr = priceStr.split('.')
-        return arr[0] + '.' + (arr[1] + '0').substr(0, 2)
-      } else {
-        return priceStr + '.00'
-      }
-    }
-  }
+  mixins: [mixin]
 })
