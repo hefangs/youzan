@@ -21,7 +21,7 @@ new Vue({
     ditails: null,
     detailTab,
     tabIndex: 0,
-    dealLists:null,
+    dealLists: null,
   },
   created() {
 
@@ -34,12 +34,12 @@ new Vue({
     },
     changeTabIndex(index) {
       this.tabIndex = index
-      if(index){
+      if (index) {
         this.getDeal()
       }
     },
-    getDeal(){
-      axios.post(url.deal,{id}).then(res => {
+    getDeal() {
+      axios.post(url.deal, { id }).then(res => {
         this.dealLists = res.data.data.lists
       })
     }
