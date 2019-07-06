@@ -1,40 +1,75 @@
 import 'css/common.css'
 import './search.css'
 
+import url from 'js/api.js'
 import Vue from 'vue'
 import axios from 'axios'
-import url from 'js/api.js'
 import qs from 'qs'
-import Velocity from 'velocity-animate'
-
 import mixin from 'js/mixin.js'
+import Velocity from 'velocity-animate'
+import { InfiniteScroll } from 'mint-ui';
 
-let {keyword, id} = qs.parse(location.search.substr(1))
+Vue.use(InfiniteScroll);
+Vue.config.productionTip = false;
+
+let {keyword,id} = qs.parse(location.search.slice(1));
 
 new Vue({
-  el: '.container',
+  el: '#app',
   data: {
+    keyword,
     searchList: null,
-    show: false
+    show: false,
+    loading: false,
+    loadingAll: false,
+    pageNum: 1,
+    pageSize: 8,
+    timeOutId: 0
   },
-  created() {
-    this.getsearchList()
+  created(){
+    this.getSearchList();
   },
   methods: {
-    getsearchList() {
-      axios.post(url.searchList, {keyword, id}).then(res => {
-        this.searchList = res.data.lists
+    getSearchList(){
+      if(this.loadingAll) return ;
+
+      this.loading = true;
+
+      axios.get(url.searchList,{
+          id,
+          keyword,
+          pageNum: this.pageNum,
+          pageSize: this.pageSize
+        }).then(res=>{
+          let currentList = res.data.data.lists;
+          this.loadingAll = currentList.length < this.pageSize;
+          if(this.pageNum === 1){
+            this.searchList = currentList;
+          }else {
+            this.searchList = this.searchList.concat(currentList);
+          }
+          
+          this.pageNum++;
+          this.loading = false;
+      }).catch(res=>{
+        // this.loading = false;
       })
     },
-    move() {
-      if(document.body.scrollTop > 100) {
-        this.show = true
-      } else {
-        this.show = false
+    moveHandle(){
+      if(document.documentElement.scrollTop > 100) {
+        this.show = true;
+      }else {
+        this.show = false;
       }
     },
-    toTop() {
-      Velocity(document.body, "scroll", { duration: 1000 })
+    goToTop(){
+      let _this = this;
+      Velocity(document.body,"scroll",{
+        duration: 1000,
+        complete(){
+          _this.show = false;
+        }
+      });
     }
   },
   mixins: [mixin]
