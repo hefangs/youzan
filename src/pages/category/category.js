@@ -4,52 +4,55 @@ import './category.css'
 import Vue from 'vue'
 import axios from 'axios'
 import url from 'js/api.js'
-
-import Foot from 'components/Foot.vue'
-
-import mixin from 'js/mixin.js'
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+import mixin from 'js/mixin.js';
 
 new Vue({
   el: '#app',
   data: {
     topLists: null,
-    topIndex: 0,
+    topIndex: null,
     subData: null,
-    rankData: null
+    rankData: null,
+    loading: true
   },
-  created() {
-    this.getTopList()
-    this.getSubList(0)
+  created(){
+    Promise.all([this.getTopList(),this.getSubList(0)]).then(res=>{
+      // this.loading = false;
+    });
+    ;
   },
   methods: {
-    getTopList() {
-      axios.post(url.topList).then(res => {
-        this.topLists = res.data.lists
-      }).catch(res => {
-
+    getTopList(){
+      return axios.get(url.topList).then(res=>{
+        this.topLists = res.data.data.lists;
+      }).catch(res=>{
+        console.log('获取一级目录失败！');
       })
     },
-    getSubList(index, id) {
-      this.topIndex = index
-      if (index === 0) {
-        this.getRank()
-      } else {
-        axios.post(url.subList, { id }).then(res => {
-          this.subData = res.data.data
+    getSubList(index,id){
+      if(index === 0 ){
+        return this.getRank();
+      }else {
+        return axios.get(url.subList,{id}).then(res=>{
+          this.topIndex = index;
+          this.subData = res.data.data;
+        }).catch(res=>{
+          console.log('获取二级目录失败！');
         })
       }
     },
-    getRank() {
-      axios.post(url.rank).then(res => {
-        this.rankData = res.data.data
+    getRank(){
+      return axios.get(url.rank).then(res=>{
+        this.rankData = res.data.data;
+        this.topIndex = 0;
+      }).catch(res=>{
+        console.log('获取综合排行失败！');
       })
     },
-    toSearch(list) {
-      location.href = `search.html?keyword=${list.name}&id=${list.id}`
+    goToSearch(list){
+      location.href = `search.html?keyword=${list.name}&id=${list.id}`;
     }
-  },
-  components: {
-    Foot
   },
   mixins: [mixin]
 })
