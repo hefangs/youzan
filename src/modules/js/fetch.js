@@ -1,21 +1,38 @@
 import axios from 'axios'
 
-function fetch(url,data) {
-  return new Promise((resolve,reject) => {
-    axios.post(url,data).then(res => {
-      let status = res.data.status
-      if(status === 200) {
-        resolve(res)
-      }
-      if(status === 300) {
-        location.href = 'login.html'
-        resolve(res)
-      }
-      reject(res)
-    }).catch(error => {
-      reject(error)
+const fetch = {
+  get(url,data){
+    return new Promise((resolve,reject)=>{
+      axios.get(url,data).then(res=>{
+        if(res.status === 200) {
+          resolve(res.data.data)
+        }
+        if(res.status === 401){
+          location.href = '/login.html'
+        }
+        resolve(res.data.data)
+      }).catch(res=>{
+        console.log('获取数据失败')
+        reject(res)
+      })
     })
-  })
+  },
+  post(url,data){
+    return new Promise((resolve,reject)=>{
+      axios.post(url,data).then(res=>{
+        if(res.status === 200) {
+          resolve(res.data.data)
+        }
+        if(res.status === 401){
+          location.href = '/login.html'
+        }
+        resolve(res.data.data)
+      }).catch(res=>{
+        console.log('获取数据失败')
+        reject(res)
+      })
+    })
+  }
 }
 
-export default fetch
+export default fetch;

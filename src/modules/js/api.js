@@ -1,26 +1,29 @@
 let url = {
-  hotLists: '/index/hotLists',
-  banner: '/index/banner',
-  topList: '/category/topList',
-  subList: '/category/subList',
-  rank: '/category/rank',
-  searchList: '/search/list',
-  details: '/goods/details',
-  deal: '/goods/deal',
-  cartAdd: '/cart/add',
-  cartRemove: '/cart/remove',
-  cartMremove: '/cart/mremove',
-  cartReduce: '/cart/reduce',
-  cartLists: '/cart/list',
-  cartUpdate: '/cart/update'
+  hotList: 'index/hotlists',
+  bannerList: 'index/banner',
+  topList: 'category/topList',
+  subList: 'category/subList',
+  rank: 'category/rank',
+  searchList: 'search/list',
+  goodsDetails: 'goods/details',
+  cartAdd: 'cart/add',
+  cartList: 'cart/cartList',
+  cartIncrease: 'cart/increase',
+  cartReduce: 'cart/reduce',
+  cartRemove: 'cart/remove',
+  cartMoreRemove: 'cart/moreRemove',
+  addressGetList: 'address/getList',
+  addressAdd: 'address/add',
+  addressUpdate: 'address/update',
+  addressRemove: 'address/remove',
+  addressSetDefault: 'address/setDefault'
 }
 
-//开发环境和真实环境的切换
-// let host = 'http://rapapi.org/mockjsdata/23334'
-let host = 'http://rapapi.org/mockjsdata/24170'
+// let host = 'http://rap2api.taobao.org/app/mock/7058'
+let host = 'https://easy-mock.com/mock/5bd7072a541c73692857acb7/youzan/'
 
-for (let key in url) {
-  if (url.hasOwnProperty(key)) {
+for(let key in url){
+  if(url.hasOwnProperty(key)){
     url[key] = host + url[key]
   }
 }
