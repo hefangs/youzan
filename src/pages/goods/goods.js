@@ -4,115 +4,96 @@ import './goods.css'
 import './goods_theme.css'
 import './goods_mars.css'
 import './goods_sku.css'
-import './goods_transition.css'
+import './goods_animate.css'
 
 import Vue from 'vue'
-import url from 'js/api.js'
 import axios from 'axios'
-import mixin from 'js/mixin.js'
+import url from 'js/api.js'
+
 import qs from 'qs'
-import Swipe from 'components/Swipe.vue'
+import mixin from 'js/mixin.js'
+import Swiper from 'components/Swiper.vue'
 
-console.log(Swipe)
-
-let { id } = qs.parse(location.search.substr(1))
-
-let detailTab = ['商品详情', '本店成交']
+let {id} = qs.parse(window.location.search.substring(1));
 
 new Vue({
   el: '#app',
   data: {
+    id,
     details: null,
-    detailTab,
     tabIndex: 0,
-    dealLists: null,
-    swipeLists: [],
-    showSku: false,
+    introExpand: false,
+    listFinished: false,
+    loading: true,
     skuType: 1,
-    skuNum: 1,
+    showSku: false,
+    showMessage: false,
     isAddCart: false,
-    showAddMessage: false
+    goodsNumber: 1,
+    imageLists: null,
+    goodsLists: null
   },
-  created() {
-    this.getDetails()
+  created(){
+    this.getDetails();
+    this.getLists();
   },
   methods: {
-    getDetails() {
-      axios.post(url.details, { id }).then(res => {
-        // 先修改数据结构，再赋值
-        let data = res.data.data
-        data.skuList.forEach(sku => {
-          let lists = []
-          sku.lists.forEach(item => {
-            lists.push({
-              active: false,
-              tag: item
-            })
-          })
-          sku.lists = lists
-        })
-
-        this.details = data
-        this.details.imgs.forEach(item => {
-          this.swipeLists.push({
-            clickUrl: '',
-            image: item
-          })
-        })
+    getDetails(){
+      axios.get(url.goodsDetails,{
+        id
+      }).then(res => {
+        this.details = res.data.data;
+        this.loading = false;
+        this.addImageLists(this.details.images);
       })
     },
-    changeTabIndex(index) {
-      this.tabIndex = index
-      if (index) {
-        this.getDeal()
-      }
+    changeTabType(index){
+      this.tabIndex = index;
     },
-    getDeal() {
-      axios.post(url.deal, { id }).then(res => {
-        this.dealLists = res.data.data.lists
-      })
+    skuTypeChange(index){
+      this.skuType = index;
+      this.showSku = true;
     },
-    chooseSku(type) {
-      this.showSku = true
-      this.skuType = type
+    changeGoodsNumber(increase){
+      if(increase < 0 && this.goodsNumber === 1) return;
+      this.goodsNumber += increase;
     },
-    chooseTag(item, index, arr) {
-      if (item.active) {
-        item.active = false
-      } else {
-        arr.forEach((cur, i) => {
-          cur.active = i === index
-        })
-      }
-    },
-    changeSkuNum(num) {
-      if (num < 0 && this.skuNum === 1) return
-      this.skuNum += num
-    },
-    addCart() {
-      axios(url.cartAdd, {id, number: this.skuNum}).then(res => {
-        if(res.data.status === 200 ){
-          this.isAddCart = true
-          this.showSku = false
-          this.showAddMessage = true
+    addToCart(){
+      axios.post(url.cartAdd,{
+        id: this.id,
+        goodsNumber: this.goodsNumber
+      }).then(res=>{
+        if(res.data.status === 200){
+          this.isAddCart = true;
+          this.showSku = false;
+          this.showMessage = true;
           setTimeout(() => {
-            this.showAddMessage = false
-          },1000)
+            this.showMessage = false
+          }, 1000);
         }
       })
+    },
+    addImageLists(lists){
+      this.imageLists =  lists.map((img,index) => {
+        return {img,id: 'details_swiper'+index};
+      });
+    },
+    getLists(){
+      axios.get(url.hotList,{}).then(res => {
+        this.goodsLists = res.data.lists;
+      })
     }
   },
-  components: {
-    Swipe
-  },
-  watch: {
-    showSku(val) {
-      document.body.style.overflow = val ? 'hidden' : 'auto'
-      document.body.style.height = val ? '100%' : 'auto'
-      document.querySelector('html').style.overflow = val ? 'hidden' : 'auto'
-      document.querySelector('html').style.height = val ? '100%' : 'auto'
+  watch:{
+    showSku(val){
+      document.body.style.overflow = val ? "hidden" : "auto";
+      document.body.style.height = val ? "100%" : "auto";
+      document.querySelector('html').style.overflow = val ? "hidden" : "auto";
+      document.querySelector('html').style.height = val ? "100%" : "auto";
     }
+  },
+  components:{
+    Swiper
   },
   mixins: [mixin]
 })
-
