@@ -1,17 +1,24 @@
-# youzan
-vue重构有赞商城
+## Vue实现有赞商城重构
 
-## Lesson07
+本项目利用有赞商城提供的API和静态文件，使用Vue-CLI手脚架、Vue组件、Vue-router搭建仿有赞商城的app。
+项目地址：[cnode]() （建议手机端访问）
 
-### 状态管理
-0. 使用vuex插件
-1. 实例化Store：配置state、mutations、actions
-2. 根组件注入
-3. 数据state的获取：[State](https://vuex.vuejs.org/zh-cn/state.html)、[Getters](https://vuex.vuejs.org/zh-cn/getters.html)
-4. 事件的触发: 同步事件[Mutations](https://vuex.vuejs.org/zh-cn/mutations.html)、[异步事件](https://vuex.vuejs.org/zh-cn/actions.html)
+### 实现页面：
++ **首页**
++ **商品列表页**
++ **商品详情页**
++ **购物车页面**
++ **个人中心页**:地址列表，地址修改，新增地址页
+### 技术栈：Vue + Vue-Router + Vuex
+### 工具：webpack mockjs
+### 第三方插件 [swiper](https://github.com/nolimits4web/Swiper) [axios](https://github.com/axios/axios)
+### UI库：[mint-ui](https://mint-ui.github.io/docs/#/zh-cn2/infinite-scroll)
 
 
-### 规则
-+ 应用层级的状态应该集中到单个 store 对象中
-+ 提交 mutation 是更改状态的唯一方法，并且这个过程是同步的
-+ 异步逻辑都应该封装到 action 里面
+
+
+
+
+
+
+
