@@ -2,7 +2,9 @@
 
 本项目利用有赞商城提供的API和静态文件，使用Vue-CLI手脚架、Vue组件、Vue-router搭建仿有赞商城的app。
 项目地址：[有赞商城](https://www.hefang.site/youzan/dist/index.html) （建议手机端访问）
-![avatar](./static/1562592456.png)
+
+
+    ![avatar](./static/1562592456.png)
 
 ### 实现页面：
 + **首页**
