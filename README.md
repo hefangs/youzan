@@ -4,7 +4,7 @@
 项目地址：[有赞商城](https://www.hefang.site/youzan/dist/index.html) （建议手机端访问）
 
 
-    ![avatar](./static/1562592456.png)
+    ![avatar](https://github.com/he529564582/youzan/blob/master/static/1562592456.png)
 
 ### 实现页面：
 + **首页**
